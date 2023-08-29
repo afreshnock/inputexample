@@ -9,6 +9,7 @@ namespace InputExample
         private GraphicsDeviceManager graphics;
         private SpriteBatch spriteBatch;
         private Ball[] balls;
+        InputManager inputMngr;
 
         /// <summary>
         /// Constructs the game
@@ -17,7 +18,8 @@ namespace InputExample
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            IsMouseVisible = true;
+            IsMouseVisible = false;
+            inputMngr = new InputManager();
         }
 
         /// <summary>
@@ -51,11 +53,16 @@ namespace InputExample
         /// <param name="gameTime">The game time</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            inputMngr.Update(gameTime);
+            if (inputMngr.Exit)
+            {
                 Exit();
-
-            // TODO: Add your update logic here
-
+            }
+            balls[0].Position += inputMngr.Position;
+            if (inputMngr.Warp)
+            {
+                balls[0].Warp();
+            }
             base.Update(gameTime);
         }
 
